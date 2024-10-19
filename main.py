@@ -27,7 +27,8 @@ with gr.Blocks(theme=gr.themes.Soft(), title="GPT-4o-audio-preview") as demo:
             fn = realtime_response,
             inputs = [gr.Text(label="Input Prompt", value="Respond with audio."), audio],
             additional_inputs = [voice_dropdown],
-            outputs=[gr.Text(label="Output Text"), gr.Audio(label="Output Audio", autoplay=True, format="wav", type="numpy")]
+            outputs=[gr.Text(label="Output Text"), gr.Audio(label="Output Audio", autoplay=True, format="wav", type="numpy")],
+            flagging_mode="never"
         )
 
     # Audio Gen Tab
@@ -53,7 +54,8 @@ with gr.Blocks(theme=gr.themes.Soft(), title="GPT-4o-audio-preview") as demo:
             fn = realtime_response,
             inputs = [gr.Text(label="Input Prompt", value="Review this clip and try to make your own original version of it."), audio],
             additional_inputs = [voice_dropdown],
-            outputs=[gr.Text(label="Output Text"), gr.Audio(label="Output Audio", autoplay=True, format="wav", type="numpy")]
+            outputs=[gr.Text(label="Output Text"), gr.Audio(label="Output Audio", autoplay=True, format="wav", type="numpy")],
+            flagging_mode="never"
         )
 
 
