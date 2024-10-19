@@ -1,0 +1,8 @@
+.env
+/.venv
+venv
+*.mp3
+/modules/__pycache__
+*.mp4
+*.pyc
+
