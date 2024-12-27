@@ -96,8 +96,50 @@ def realtime_response(systext, text, audio_data, voice):
             return transcript, pcm_base64
         except:
             return transcript, None
-
+    
     except Exception as e:
         print(f"Error during communication: {e}")
         return None, None
 
+transcript_history = []
+
+def realtime_chatresponse(systext, text, audio_data, voice):
+    content = []
+    history_response = []
+    history_response.append({"role": "system", "content": [
+        {
+            "type": "text",
+            "text": systext
+        }
+    ]})
+
+
+    if text:
+        content.append({"type": "text", "text": text})
+
+    history_response.append({"role": "user", "content": content})
+
+    try:
+        response = openai.chat.completions.create(
+            model="gpt-4o-mini-audio-preview-2024-12-17",
+            modalities=["text", "audio"],
+            audio={"voice": voice, "format": "wav"},
+            messages=history_response
+        )
+
+        transcript = "You: " + text + "\n\n" + "AI: " +response.choices[0].message.audio.transcript + "\n\n"
+
+        try:
+            wav_bytes = base64.b64decode(response.choices[0].message.audio.data)
+
+            # audio_id = response.choices[0].message.audio.id
+
+            pcm_base64 = wav_to_numpy(wav_bytes)
+
+            return transcript, pcm_base64
+        except:
+            return transcript, None
+    
+    except Exception as e:
+        print(f"Error during communication: {e}")
+        return None, None

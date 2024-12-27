@@ -1,5 +1,6 @@
 import gradio as gr
 from modules.get_openai_response import realtime_response
+from modules.get_openai_response import realtime_chatresponse
 
 with gr.Blocks(theme=gr.themes.Soft(), title="GPT-4o-audio-preview") as demo:
     gr.Markdown(f"<h1 style='text-align: center; display:block'>{'GPT-4o-audio-preview'}</h1>")
@@ -65,7 +66,39 @@ with gr.Blocks(theme=gr.themes.Soft(), title="GPT-4o-audio-preview") as demo:
             flagging_mode="never"
         )
 
+    # Chat Window Tab
+    with gr.Tab("Chat"):
+        gr.Markdown(f"<p>{'Chat window with the AI'}</p>")
 
+        with gr.Row():
+
+            prompt = gr.Text(
+                label="System Prompt",
+                value="",
+                interactive=True,
+                render=False
+            )
+
+            audio = gr.Audio(
+                label = "Audio Input",
+                type="numpy",
+                render = False
+            )
+
+            voice_dropdown = gr.Dropdown(
+                ["alloy", "echo", "fable", "onyx", "nova", "shimmer"],
+                label = "Voice",
+                value = "alloy",
+                render = False
+            )
+
+        chat = gr.Interface(
+            fn = realtime_chatresponse,
+            inputs = [prompt, gr.Text(label="Input Prompts", value="Respond with audio."), audio],
+            additional_inputs = [voice_dropdown],
+            outputs=[gr.Text(label="Chat Window"), gr.Audio(label="Output Audio", autoplay=True, format="wav", type="numpy")],
+            flagging_mode="never",
+        )
 
 if __name__ == "__main__":
     demo.queue()
