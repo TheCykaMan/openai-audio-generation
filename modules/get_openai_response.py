@@ -48,9 +48,16 @@ def extract_mp3(url):
     AudioSegment.from_file(audio).export(wav, format='wav')
     return base64.b64encode(wav.getvalue()).decode('utf-8')
 
-def realtime_response(text, audio_data, voice):
+def realtime_response(systext, text, audio_data, voice):
     content = []
     history_response = []
+    history_response.append({"role": "system", "content": [
+        {
+            "type": "text",
+            "text": systext
+        }
+    ]})
+
 
     if audio_data:
         try:
@@ -67,11 +74,11 @@ def realtime_response(text, audio_data, voice):
 
     history_response.append({"role": "user", "content": content})
 
-    # print(history_response)
+    print(history_response)
 
     try:
         response = openai.chat.completions.create(
-            model="gpt-4o-audio-preview",
+            model="gpt-4o-mini-audio-preview-2024-12-17",
             modalities=["text", "audio"],
             audio={"voice": voice, "format": "wav"},
             messages=history_response

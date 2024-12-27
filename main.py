@@ -10,6 +10,13 @@ with gr.Blocks(theme=gr.themes.Soft(), title="GPT-4o-audio-preview") as demo:
 
         with gr.Row():
 
+            prompt = gr.Text(
+                label="System Prompt",
+                value="",
+                interactive=True,
+                render=False
+            )
+
             audio = gr.Audio(
                 label = "Audio Input",
                 type="numpy",
@@ -25,7 +32,7 @@ with gr.Blocks(theme=gr.themes.Soft(), title="GPT-4o-audio-preview") as demo:
 
         chat = gr.Interface(
             fn = realtime_response,
-            inputs = [gr.Text(label="Input Prompt", value="Respond with audio."), audio],
+            inputs = [prompt, gr.Text(label="Input Prompts", value="Respond with audio."), audio],
             additional_inputs = [voice_dropdown],
             outputs=[gr.Text(label="Output Text"), gr.Audio(label="Output Audio", autoplay=True, format="wav", type="numpy")],
             flagging_mode="never"
